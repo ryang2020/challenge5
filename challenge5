@@ -1,0 +1,171 @@
+int lMotor = 0; //motor port
+int rMotor = 2; //motor port
+int topHat = 5; //tophat sensor port
+int topHat2 = 6; //tophat sensor port
+int bump = 9; //bump sensor
+int speedL = 90; //speed value
+int speedR = 90; //speed value 
+int turnR = 20; //turn value 
+int turnL = 20; //turn value
+int shortPause = 500; //msleep value
+int pause = 1500;
+int pauseActual = 1000;
+int line = 50; //range number
+int pause4 = 300;
+int r_speed = -75; // variable for the speed for the right motor 
+int speed = 75; // variable for the speed of the robot 
+int pause5 = 550;
+int new1 = 300;
+int new2 = 450;
+int new3 = 500;
+int new4 = 250;
+int etsensor = 2;
+int etsensor2 = 1;
+int wall = 200;
+
+void forward(){ //forward function
+  motor (lMotor, speedL);
+  motor (rMotor, speedR);
+   
+}
+
+void shortforward(){
+motor (lMotor, speedL);
+  motor (rMotor, speedR);
+  msleep(new1);
+}
+
+void backward(){
+motor (lMotor, -speedL);
+  motor (rMotor, -speedR);
+}
+void miniturnL(){ //left turn function
+    motor(lMotor, turnL);
+    motor(rMotor, speedR);  
+    
+}
+
+void miniturnR(){ //right turn function
+  motor(lMotor, speedL);
+    motor(rMotor, turnR);
+    
+}
+
+
+
+void forwardWhile(){ //while loop when searching for line
+    while(analog(topHat) <= line){
+        forward();
+    }
+     ao();
+}
+
+void shimmeyWhile(){ //while loop when on line 
+     while(digital(bump)==0){//as long as the bumper isn't pressed...
+       
+        if(analog(topHat)>= line){
+            miniturnR();
+          }  
+        if (analog(topHat)<=line){
+           miniturnL();
+        }
+   
+    }
+}
+
+
+void shimmeyWhile2(){ //while loop when on line 
+     while(analog(topHat2)<= line){//as long as the sensor does'nt see the line...
+       
+        if(analog(topHat)>= line){
+            miniturnR();
+          }  
+        if (analog(topHat)<=line){
+           miniturnL();
+        }
+   
+    }
+}
+
+void shimmeyWhile3(){  
+     while(analog(etsensor2)>= wall){//as long as the sensor does'nt see the line...
+       
+        if(analog(etsensor)>= wall){
+            miniturnR();
+          }  
+        if (analog(etsensor)<=wall){
+           miniturnL();
+        }
+   
+    }
+}
+
+void turnR1(){  // the turnR function turns the robot to the right
+  motor(lMotor,speed);
+    motor(rMotor,r_speed);
+    
+}
+
+
+void turnl(){  // the turnR function turns the robot to the right
+  motor(lMotor,r_speed);
+    motor(rMotor,speed);
+    msleep(pause5);
+   
+}
+
+void turnl2(){  // the turnR function turns the robot to the right
+  motor(lMotor,r_speed);
+    motor(rMotor,speed);
+    msleep(new3);
+   
+}
+
+void turnl3(){  // the turnR function turns the robot to the right
+  motor(lMotor,r_speed);
+    motor(rMotor,speed);
+    msleep(new4);
+   
+}
+
+void phase1(){
+forward();
+msleep(pause4);
+turnR1();
+msleep(pause4);
+    while(digital(bump)==0){//as long as the bumper isn't pressed...
+       forward(); //run forward funtion
+       
+   }
+   if(digital(bump)==1){
+    turnl();   
+   }
+}
+
+void phase2(){
+backward();
+msleep(new1);
+turnl2();
+forward();
+	msleep(pause5);
+ao();
+}
+
+
+int main() //run the functions 
+{
+   phase1();
+   forwardWhile();
+   shimmeyWhile();  
+phase2();
+forwardWhile();
+shimmeyWhile2();
+shortforward();
+shimmeyWhile3();
+turnl3();
+shimmeyWhile3();
+turnl3();
+shimmeyWhile3();
+return 0;
+
+}
